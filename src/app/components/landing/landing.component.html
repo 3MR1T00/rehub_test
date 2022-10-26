@@ -1,0 +1,37 @@
+<div class="toolbar">
+    <div class="tabs">
+        <div class="filterFields">
+            <button (click)="filterIsopen = !filterIsopen">{{filterIsopen ? 'Close': 'Apply filter'}}</button>
+        </div>
+        <div class="search">
+            <input type="text" [(ngModel)]="searchTerm" class="searchTerm" placeholder="Search" (input)="onSearchTermChange()">
+        </div>
+    </div>
+    <div *ngIf="filterIsopen" class="filterOptions">
+        <form [formGroup]="filterForm" (ngSubmit)="onAddFilter()">
+            <select *ngIf="joints" formControlName="joint">
+                <option *ngFor="let joint of joints">{{joint.id}}</option>
+            </select>
+            <select *ngIf="tools" formControlName="tool">
+                <option *ngFor="let tool of tools">{{tool.id}}</option>
+            </select>
+            <div>
+                <button>Add</button>
+            </div>
+          </form>
+    </div>
+    <div class="currentFilters" *ngIf="filters.length > 0">
+        <div class="filter-item">
+            <div *ngFor="let filter of filters" class="filter">
+                <span *ngIf="filter.joint">Joint: {{filter.joint}}</span>
+                <span *ngIf="filter.tool">Tool: {{filter.tool}}</span>
+                <div class="closer" (click)="onRemoveFilter(filter)">X</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content" *ngIf="displayedExcercises; else excercisesNotFound">
+    <app-excercise *ngFor="let excercise of displayedExcercises" [excercise]="excercise"></app-excercise>
+</div>
+<ng-template #excercisesNotFound></ng-template>

@@ -1,0 +1,12 @@
+<div class="card" (click)="editExcercise()">
+    <div class="title">{{excercise.name}}</div>
+    <img src="{{excercise.img}}" alt="excercises">
+    <div class="footer">
+        <div>Joint: {{excercise.joint}}</div>
+        <div class="signal">{{excercise.signal.id}}: {{excercise.signal.min}}-{{excercise.signal.max}}</div>
+        <div class="tools">
+            <div class="prefix">Tools:</div>
+            <div *ngFor="let tools of excercise.tools">{{tools}};</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+.toolbar {
+    margin: 2em 1%;
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .filterOptions {
+      form {
+        display: flex;
+
+        button {
+          margin-top: 1em;
+          margin-right: .5em;
+          height: 25px;
+        }
+      }
+
+      select {
+        margin-top: 1em;
+        margin-right: .5em;
+        appearance: none;
+        border: 0;
+        outline: 0;
+        height: 25px;
+        padding: 0 4em 0 1em;
+        background: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg) no-repeat right 0.8em center / 1.4em, linear-gradient(to left, lightgray 3em, lightgray 3em);
+        color: inherit;
+        cursor: pointer;
+        option {
+          color: inherit;
+          background-color: lightgray;
+        }
+        &:focus {
+          outline: none;
+        }
+        &::-ms-expand {
+          display: none;
+        }
+      }
+    }
+
+    .filterFields {
+      display: flex;
+      height: 30px;
+    }
+
+    .search {
+        width: 20%;
+        position: relative;
+        display: flex;
+    
+        .searchTerm {
+            width: 100%;
+            border: 1px solid #00B4CC;
+            border-radius: 5px;
+            outline: none;
+            color: #9DBFAF;
+    
+            &:focus{
+                color: #00B4CC;
+            }
+        }
+    }
+
+    .currentFilters {
+      display: flex;
+      margin-top: 1em;
+      
+
+      .filter-item {
+        display: flex;
+        
+        .filter {
+          display: flex;
+          padding: .5em;
+          background:rgb(95, 156, 136);
+          font-size: .7em;
+          border-radius: .5em;
+          color: white;
+          margin-right: .2em;
+
+          .closer {
+            margin-left: 1em;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+}
+
+
+.main-content {
+    position: relative;
+    left: 1%;
+    width: 98%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 1.5em;
+}
