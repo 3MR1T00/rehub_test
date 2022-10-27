@@ -10,6 +10,11 @@
       form {
         display: flex;
 
+        select {
+          width: unset;
+          margin-right: 1em;
+        }
+
         button {
           margin-top: 1em;
           margin-right: .5em;
@@ -34,7 +39,7 @@
             border-radius: 5px;
             outline: none;
             color: #9DBFAF;
-    
+            padding: 7px 16px 6px;
             &:focus{
                 color: #00B4CC;
             }

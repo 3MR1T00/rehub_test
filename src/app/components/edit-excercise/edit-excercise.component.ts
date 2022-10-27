@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { IExcercise, Joint, Signal, Tool } from 'src/app/interfaces/interfaces';
 import { ExcerciseService } from 'src/app/services/excercise/excercise.service';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -11,7 +11,7 @@ import { ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./edit-excercise.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditExcerciseComponent implements OnInit{
+export class EditExcerciseComponent{
   excerciseForm!: FormGroup;
   loading = false;
   submitted = false;
@@ -24,44 +24,76 @@ export class EditExcerciseComponent implements OnInit{
   
 
   constructor(private formBuilder: FormBuilder, private _excerciseService: ExcerciseService, private cdr: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {
-    this.excercisedId = this.activatedRoute.snapshot.params['id'];
-    this.getData(this.excercisedId);
-
-    this.excerciseForm = this.formBuilder.group({
-      name:  ['', [Validators.required, Validators.maxLength(50)]],
+     // incialize form structure
+     this.excerciseForm = this.formBuilder.group({
+      id: ['', Validators.required],
+      img: ['', Validators.required],
       joint: ['', Validators.required],
+      name:  ['', [Validators.required, Validators.maxLength(50)]],
       tools: [[]],
       signal: this.formBuilder.group({
         name: ['', [Validators.required]],
         min:  ['', [Validators.required]],
         max:  ['', [Validators.required]]
-      })
+      }, { validator: this.compareMinMax })
     });
-    
-    
+
+    // get excercise id param from router
+    this.excercisedId = this.activatedRoute.snapshot.params['id'];
+
+    // fetch data and fill form
+    this.getData(this.excercisedId);
   }
-  ngOnInit(): void {
-    
-  }
- 
+
+  
   onRemoveTool(tool: string) {
+    //get the index of clicked tool from the tool list of excercise
+    const toolIndex = this.excercise.tools.findIndex(items => items.toLowerCase() === tool.toLowerCase())
 
+    // remove clicked tool from the list of tools of excercise, this will simulate a visual efect of tool removal, so user understands clicked tool was removed
+    this.excercise.tools.splice(toolIndex, 1);
+
+    // reasign the value of tools' form control field
+    this.excerciseForm.controls["tools"].setValue(this.excercise.tools);
   }
 
+  onToolChange(tool: string) {
+    // get the list of current tools of excercise
+    let currentTools = this.excerciseForm.controls['tools'].value;
+
+    // if tool is not currently present
+    if(!currentTools.includes(tool)) {
+      // add tool in the list of tools of excercise
+      this.excercise.tools.push(tool);
+
+      // reasign the value of tools form control field
+      this.excerciseForm.controls["tools"].setValue(this.excercise.tools);
+    }
+  }
 
   getData(id: string) {
     this._excerciseService.getExcerciseById(id).then(res => {
       this.excercise = res;
+      // fill the form with current data of excercise
       this.loadData();
-      this.cdr.detectChanges();
     });
   }
   
+  compareMinMax(group: AbstractControl): {[key: string]: any} | null {
+    const min = group.get('min')?.value;
+    const max = group.get('max')?.value;
+
+    return max > min ? null : {'minNotLower': true}
+  }
+
 
   loadData() {
+    
     this.excerciseForm.patchValue({
-      name: this.excercise.name,
+      id: this.excercise.id,
+      img: this.excercise.img,
       joint: this.excercise.joint,
+      name: this.excercise.name,
       tools: [...this.excercise.tools.map(item => item)],
       signal: {
         name: this.excercise.signal.id,
@@ -96,26 +128,18 @@ export class EditExcerciseComponent implements OnInit{
     return (this.excerciseForm.controls['signal'] as FormGroup).controls;
   }
 
-  compareMinMax(control: AbstractControl): ValidationErrors | null { 
-    const min = (control.get('signal') as FormGroup).controls['min'].value;
-    const max = (control.get('signal') as FormGroup).controls['max'].value;
-
-    if (max > min ) { return null }
-    return { 'noMatch': true }
-  }
-
   onSubmit() {
     this.submitted = true;
 
     // stop here if form is invalid
     if (this.excerciseForm.invalid) {
+      console.log(this.excerciseForm.controls['signal'].errors)
       return;
     }
 
-    // set loading to true if you are going to realize http request here
+    // set loading to true so button is disable while http post is being done
     // this.loading = true;
 
-    // and set it to false again when request is over
     // someService.someAction.subscribe({
     //   next: (res) => {
     //     some logic
@@ -128,7 +152,6 @@ export class EditExcerciseComponent implements OnInit{
     //     some logic
     //   }
     // })
-
-    console.log(this.excerciseForm.controls);
+    console.log(this.excerciseForm.value)
   }
 }

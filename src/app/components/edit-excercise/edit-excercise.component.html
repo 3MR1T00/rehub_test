@@ -22,7 +22,7 @@
   
     <div class="form-group">
       <div>Tools</div>
-      <select formControlName="tools">
+      <select #tool (change)="onToolChange(tool.value)">
         <option *ngFor="let tool of tools">
           {{tool.id}}
         </option>
@@ -36,7 +36,7 @@
     </div>
   
     <div class="form-group" style="display: flex" formGroupName="signal">
-      <div class="form-group-secotor">
+      <div class="form-group-section">
         <div>Signal</div>
         <select formControlName="name">
           <option *ngFor="let signal of signals" [selected]="excercise.signal.id == signal.id">
@@ -44,19 +44,26 @@
           </option>
         </select>
       </div>
-      <div class="form-group-secotor">
+      <div class="form-group-section">
         <label for="name">min</label>
-        <input type="text" formControlName="min"/>
+        <input #min type="number" formControlName="min"/>
         <div *ngIf="submitted && signalF['min'].errors">
-          <div  class="invalid-field"*ngIf="signalF['min'].errors['required']">Minumum number is required</div>
+          <div class="invalid-field" *ngIf="signalF['min'].errors['required']">Minumum number is required</div>
+        </div>
+        <div *ngIf="submitted && excerciseF['signal'].errors">
+          <div class="invalid-field" *ngIf="excerciseF['signal'].errors['minNotLower']">Min has to be lower than max</div>
         </div>
       </div>
-       <div class="form-group-secotor">
+       <div class="form-group-section">
         <label for="name">max</label>
-        <input type="text" formControlName="max"/>
+        <input #max type="number" formControlName="max"/>
         <div *ngIf="submitted && signalF['max'].errors">
           <div class="invalid-field" *ngIf="signalF['max'].errors['required']">Maximum number is required</div>
         </div>
+       </div>
+       <div class="form-group-section">
+        <label for="name">Rom</label>
+        <input style="background:transparent;" value="{{signalF['max'].value - signalF['min'].value}}" disabled>
        </div>
     </div>
     
