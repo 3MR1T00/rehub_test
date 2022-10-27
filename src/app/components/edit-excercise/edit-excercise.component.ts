@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { IExcercise, Joint, Signal, Tool } from 'src/app/interfaces/interfaces';
 import { ExcerciseService } from 'src/app/services/excercise/excercise.service';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -44,6 +44,11 @@ export class EditExcerciseComponent implements OnInit{
     
   }
  
+  onRemoveTool(tool: string) {
+
+  }
+
+
   getData(id: string) {
     this._excerciseService.getExcerciseById(id).then(res => {
       this.excercise = res;
@@ -51,6 +56,7 @@ export class EditExcerciseComponent implements OnInit{
       this.cdr.detectChanges();
     });
   }
+  
 
   loadData() {
     this.excerciseForm.patchValue({
@@ -82,8 +88,20 @@ export class EditExcerciseComponent implements OnInit{
 
 
   // convenience getter for easy access to form fields
-  get f() {
+  get excerciseF() {
     return this.excerciseForm.controls;
+  }
+
+  get signalF() {
+    return (this.excerciseForm.controls['signal'] as FormGroup).controls;
+  }
+
+  compareMinMax(control: AbstractControl): ValidationErrors | null { 
+    const min = (control.get('signal') as FormGroup).controls['min'].value;
+    const max = (control.get('signal') as FormGroup).controls['max'].value;
+
+    if (max > min ) { return null }
+    return { 'noMatch': true }
   }
 
   onSubmit() {
@@ -111,6 +129,6 @@ export class EditExcerciseComponent implements OnInit{
     //   }
     // })
 
-    console.log(this.excerciseForm.value);
+    console.log(this.excerciseForm.controls);
   }
 }

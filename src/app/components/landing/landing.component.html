@@ -1,7 +1,7 @@
 <div class="toolbar">
     <div class="tabs">
         <div class="filterFields">
-            <button (click)="filterIsopen = !filterIsopen">{{filterIsopen ? 'Close': 'Apply filter'}}</button>
+            <button (click)="filterIsopen = !filterIsopen">{{filterIsopen ? 'Close': 'New filter'}}</button>
         </div>
         <div class="search">
             <input type="text" [(ngModel)]="searchTerm" class="searchTerm" placeholder="Search" (input)="onSearchTermChange()">

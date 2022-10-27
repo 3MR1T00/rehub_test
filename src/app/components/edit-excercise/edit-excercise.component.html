@@ -1,55 +1,67 @@
 <form [formGroup]="excerciseForm" (ngSubmit)="onSubmit()" *ngIf="excercise">
     <div class="form-group">
-      <label for="name">name</label>
+      <div>Name</div>
       <input type="text" formControlName="name"/>
-      <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
-        <div *ngIf="f['name'].errors['required']">name is required</div>
-        <div *ngIf="f['name'].errors['maxlength']">name has to contain less than 50 characters</div>
+      <div *ngIf="submitted && excerciseF['name'].errors">
+        <div  class="invalid-field" *ngIf="excerciseF['name'].errors['required']">name is required</div>
+        <div  class="invalid-field" *ngIf="excerciseF['name'].errors['maxlength']">name has to contain less than 50 characters</div>
       </div>
     </div>
     
     <div class="form-group">
-      <label for="joint">joint</label>
+      <div>Joint</div>
       <select formControlName="joint">
         <option *ngFor="let joint of joints" [selected]="excercise.joint == joint.id">
           {{joint.id}}
         </option>
       </select>
-      <div *ngIf="submitted && f['joint'].errors" class="invalid-feedback">
-        <div *ngIf="f['joint'].errors['required']">joint is required</div>
+      <div *ngIf="submitted && excerciseF['joint'].errors">
+        <div  class="invalid-field" *ngIf="excerciseF['joint'].errors['required']">joint is required</div>
       </div>
     </div>
   
     <div class="form-group">
-      <label for="tools">tools</label>
+      <div>Tools</div>
       <select formControlName="tools">
         <option *ngFor="let tool of tools">
           {{tool.id}}
         </option>
       </select>
-      <div class="currentTools" *ngIf="excercise.tools.length > 0" style="display: flex;">
-        <div style="margin-right: 10px;"*ngFor="let tool of excercise.tools">
-          <span>{{tool}}</span>
-          <span>X</span>
+      <div class="currentTools" *ngIf="excercise.tools.length > 0">
+        <div *ngFor="let tool of excercise.tools" class="tools">
+            <span>{{tool}}</span>
+            <div class="closer" (click)="onRemoveTool(tool)">X</div>
         </div>
       </div>
     </div>
   
-    <div class="form-group" formGroupName="signal">
-        <label for="name">name</label>
+    <div class="form-group" style="display: flex" formGroupName="signal">
+      <div class="form-group-secotor">
+        <div>Signal</div>
         <select formControlName="name">
           <option *ngFor="let signal of signals" [selected]="excercise.signal.id == signal.id">
             {{signal.id}}
           </option>
         </select>
+      </div>
+      <div class="form-group-secotor">
         <label for="name">min</label>
         <input type="text" formControlName="min"/>
+        <div *ngIf="submitted && signalF['min'].errors">
+          <div  class="invalid-field"*ngIf="signalF['min'].errors['required']">Minumum number is required</div>
+        </div>
+      </div>
+       <div class="form-group-secotor">
         <label for="name">max</label>
         <input type="text" formControlName="max"/>
+        <div *ngIf="submitted && signalF['max'].errors">
+          <div class="invalid-field" *ngIf="signalF['max'].errors['required']">Maximum number is required</div>
+        </div>
+       </div>
     </div>
     
     <div class="form-group">
-      <button [disabled]="loading" class="btn btn-primary">Login</button>
+      <button [disabled]="loading" class="btn btn-primary">Submit</button>
     </div>
   </form>
 
