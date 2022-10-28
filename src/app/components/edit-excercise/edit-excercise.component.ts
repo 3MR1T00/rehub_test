@@ -144,6 +144,7 @@ export class EditExcerciseComponent {
       .then(res => {
         this.loading = false;
         this.response = res;
+        console.log(res);
       })
       .catch((err) => {
         this.loading = false;

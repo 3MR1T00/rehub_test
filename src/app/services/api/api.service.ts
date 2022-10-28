@@ -40,6 +40,7 @@ export class ApiService {
   async setExcerciseById(excercise: IExcercise): Promise<IExcercise> {
     return await fetch(`${this.apiURL}exercises/${excercise.id}`, {
       method: "POST",
+      mode: "cors",
       body: JSON.stringify(excercise)
     }).then(res => res.json());
   }
