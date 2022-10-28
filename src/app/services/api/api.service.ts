@@ -38,7 +38,7 @@ export class ApiService {
   }
 
   async setExcerciseById(excercise: IExcercise): Promise<IExcercise> {
-    return await fetch(`${this.apiURL}execises/${excercise.id}`, {
+    return await fetch(`${this.apiURL}exercises/${excercise.id}`, {
       method: "POST",
       body: JSON.stringify(excercise)
     }).then(res => res.json());
