@@ -29,15 +29,11 @@ form {
 
         .form-group-section {
             width: 100%;
-            &:nth-child(-n+3) {
-                margin-right: .5em;
-            }
+            &:nth-child(-n+3) { margin-right: .5em; }
         }
 
-        .invalid-field {
-            color: red;
-        }
-        
+        .invalid-field, .post_fail { color: red; }
+        .post_success { color: green; }
     }
 }
                    

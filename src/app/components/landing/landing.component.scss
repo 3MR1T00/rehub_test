@@ -29,7 +29,6 @@
     }
 
     .search {
-        width: 20%;
         position: relative;
         display: flex;
     
@@ -73,11 +72,24 @@
 }
 
 
+
+
 .main-content {
     position: relative;
     left: 1%;
     width: 98%;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(1fr);
     grid-gap: 1.5em;
+
+    // this should ideally go into separate scss file called breakpoints, which then would be imported here, giving access it breakpoint mixins
+    @media (min-width: 400px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 800px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(6, 1fr);
+    }
 }

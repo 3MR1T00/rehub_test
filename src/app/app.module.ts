@@ -6,6 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+
 // Components
 import { AppComponent } from './app.component';
 import { RehubHeaderComponent } from './components/rehub-header/rehub-header.component';
@@ -30,7 +32,7 @@ import { EditExcerciseComponent } from './components/edit-excercise/edit-excerci
     ReactiveFormsModule,
     FormsModule
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

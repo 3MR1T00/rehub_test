@@ -29,5 +29,8 @@ export class ExcerciseService {
     return this._api.getExcerciseById(id);
   }
 
+  setExcerciseById(excercise: IExcercise): Promise<IExcercise> {
+    return this._api.setExcerciseById(excercise);
+  }
  
 }

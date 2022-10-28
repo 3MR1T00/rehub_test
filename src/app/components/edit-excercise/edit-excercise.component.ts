@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExcercise, Joint, Signal, Tool } from 'src/app/interfaces/interfaces';
 import { ExcerciseService } from 'src/app/services/excercise/excercise.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -11,7 +11,7 @@ import { ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./edit-excercise.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditExcerciseComponent{
+export class EditExcerciseComponent {
   excerciseForm!: FormGroup;
   loading = false;
   submitted = false;
@@ -20,6 +20,7 @@ export class EditExcerciseComponent{
   tools!: Tool[];
   signals!: Signal[];
   excercisedId!: string;
+  response: any;
 
   
 
@@ -44,7 +45,7 @@ export class EditExcerciseComponent{
     // fetch data and fill form
     this.getData(this.excercisedId);
   }
-
+  
   
   onRemoveTool(tool: string) {
     //get the index of clicked tool from the tool list of excercise
@@ -133,25 +134,29 @@ export class EditExcerciseComponent{
 
     // stop here if form is invalid
     if (this.excerciseForm.invalid) {
-      console.log(this.excerciseForm.controls['signal'].errors)
       return;
     }
 
-    // set loading to true so button is disable while http post is being done
-    // this.loading = true;
+    // loading is binded to submit button's native directive - [disabled]
+    // set it to true, to disable button while http post is processed in the background.
+    this.loading = true;
+    this._excerciseService.setExcerciseById(this.excerciseForm.value)
+      .then(res => {
+        this.loading = false;
+        this.response = res;
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.response = err;
+      })
+      .finally(() => {
+        this.cdr.detectChanges();
+      });
 
-    // someService.someAction.subscribe({
-    //   next: (res) => {
-    //     some logic
-    //   },
-    //   error: (err) => {
-    //     this.loading = false;
-    //     some logic
-    //   },
-    //   complete: () => {
-    //     some logic
-    //   }
-    // })
-    console.log(this.excerciseForm.value)
+      // will force post feedback to dissapear after 2 seconds
+      setTimeout(() => {
+        this.response = null;
+        this.cdr.detectChanges();
+      }, 2000)      
   }
 }

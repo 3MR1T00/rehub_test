@@ -1,24 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { environment as env} from 'src/environments/environment';
 import { IExcercise, Joint, Signal, Tool } from '../../interfaces/interfaces';
-
+import config  from '../../../assets/json/config.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   apiURL = `${env.apiURL}${env.api_env}`;
-  headersXHR = {
-    method: "GET",
-    headers: {
-      'Accept': 'application/json',
-    },
-  };
+ 
+  constructor() {}
 
-  constructor(private _http: HttpClient) {}
-
-  async joints() {
+  async joints(): Promise<Joint[]> {
     return this.fetch(`${this.apiURL}joints`);
     // return this._http.get(`${this.apiURL}joints`, {observe: 'body'});
   }
@@ -33,19 +26,26 @@ export class ApiService {
     // return this.request(`${this.apiURL}signals`);
   }
 
-  async exercises(): Promise<IExcercise[]>{
+  async exercises(): Promise<IExcercise[]> {
     return this.fetch(`${this.apiURL}exercises`);
     // return this.request(`${this.apiURL}exercises`);
   }
 
-  async getExcerciseById(id: string): Promise<IExcercise>{
-    return await fetch(`${this.apiURL}exercises/${id}`, this.headersXHR)
+  async getExcerciseById(id: string): Promise<IExcercise> {
+    return await fetch(`${this.apiURL}exercises/${id}`, config.getHeadersXHR)
     .then((res) => res.json());
-    // return this.request(`${this.apiURL}exercises`);
+    // return this.request(`${this.apiURL}exercises/${id}`);
+  }
+
+  async setExcerciseById(excercise: IExcercise): Promise<IExcercise> {
+    return await fetch(`${this.apiURL}execises/${excercise.id}`, {
+      method: "POST",
+      body: JSON.stringify(excercise)
+    }).then(res => res.json());
   }
 
   private async fetch(url: string): Promise<IExcercise[]> {
-    return await fetch(url, this.headersXHR)
+    return await fetch(url, config.getHeadersXHR)
                   .then((res) => res.json()
                   .then((res) => Object.values(res)));
   }
