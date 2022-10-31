@@ -128,6 +128,7 @@ export class LandingComponent implements OnInit {
     });
 
     this._excerciseService.getTools().then(res => {
+      // add empty object of tool to received array of tools
       this.tools = [{id: '', name: ''},...res];
       this.cdr.detectChanges();
     });
@@ -138,6 +139,7 @@ export class LandingComponent implements OnInit {
     // });
 
     this._excerciseService.getJoints().then(res => {
+      // add empty object of joint to received array of joints
       this.joints = [{id: '', name: ''},...res];
       this.cdr.detectChanges();
     });
