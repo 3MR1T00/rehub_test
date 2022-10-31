@@ -36,8 +36,8 @@ export class LandingComponent implements OnInit {
   // whenever user adds or removes new character in searchbar
   // if search term does not exist, previusly selected filters will be applied(if they exists)
   onSearchTermChange() {
-    let currentExcercises = this.filterByToolsAndJoints(this.displayedExcercises);
-    this.displayedExcercises = this.searchTerm  === '' ?  this.filterByToolsAndJoints(this.excercises) : currentExcercises.filter(item => item.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+    let currentExcercises = this.filterByToolsAndJoints(this.excercises);
+    this.displayedExcercises = this.searchTerm  === '' ?  currentExcercises : currentExcercises.filter(item => item.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
   }
 
   onAddFilter(): void {

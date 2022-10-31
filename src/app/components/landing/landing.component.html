@@ -24,6 +24,7 @@
         <div class="filter-item">
             <div *ngFor="let filter of filters" class="filter">
                 <span *ngIf="filter.joint">Joint: {{filter.joint}}</span>
+                <span *ngIf="filter.joint && filter.tool">;</span>
                 <span *ngIf="filter.tool">Tool: {{filter.tool}}</span>
                 <div class="closer" (click)="onRemoveFilter(filter)">X</div>
             </div>
